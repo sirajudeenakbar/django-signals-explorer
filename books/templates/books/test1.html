@@ -1,0 +1,114 @@
+{% extends "books/base.html" %}
+
+{% block content %}
+
+<div class="content-card">
+
+    <h1>⚡ Test 1 - Synchronous Signals</h1>
+
+    <h3>Question</h3>
+    <p>Are Django signals synchronous by default?</p>
+
+    <h3>Answer</h3>
+    <p>Yes.</p>
+
+    <h3>Proof Code</h3>
+
+    <pre>
+@receiver(post_save, sender=Book)
+def book_saved(sender, instance, **kwargs):
+
+    print("Signal Started")
+
+    time.sleep(3)
+
+    print("Signal Finished")
+
+
+start = time.time()
+
+Book.objects.create(title="Sync Test")
+
+duration = time.time() - start
+    </pre>
+
+    <h3>Live Experiment</h3>
+
+    <p>
+        Click the button below to trigger the signal and
+        observe its execution in real time.
+    </p>
+
+    <button id="runBtn">
+        ▶ Run Experiment
+    </button>
+
+    <br><br>
+
+    <div id="status">
+        🟢 Ready
+    </div>
+
+    <br>
+
+    <div id="result"></div>
+
+    <h3>Conclusion</h3>
+
+    <p>
+        Run the experiment using the button above.
+        If the execution takes approximately 3 seconds,
+        it proves that the caller waits for the signal
+        to finish before continuing.
+        Therefore Django signals are synchronous by default.
+    </p>
+
+    <a href="/" class="back-btn">
+        ← Back to Home
+    </a>
+
+</div>
+
+<script>
+
+document.getElementById("runBtn").onclick = async function(){
+
+    const btn = document.getElementById("runBtn");
+
+    btn.disabled = true;
+
+    document.getElementById("status").innerHTML =
+    "🟡 Signal Started...";
+
+    document.getElementById("result").innerHTML = "";
+
+    const response = await fetch("/run-test1/");
+
+    const data = await response.json();
+
+    document.getElementById("status").innerHTML =
+    "✅ Signal Finished";
+
+    document.getElementById("result").innerHTML =
+    `
+    <br>
+    <strong>Execution Time:</strong>
+    ${data.duration} seconds
+
+    <br><br>
+
+    <strong>Observation:</strong>
+    The caller waited for the signal to finish.
+
+    <br><br>
+
+    <strong>Conclusion:</strong>
+    Django signals are synchronous by default.
+    `;
+
+    btn.disabled = false;
+};
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends "books/base.html" %}
+
+{% block content %}
+
+<div class="hero">
+    <h1>Django Signals Explorer</h1>
+
+    <p>
+        Understanding Signal Synchronization,
+        Thread Execution and Database Transactions
+    </p>
+</div>
+
+<div class="card-container">
+
+    <a href="/test1/" class="card card-1">
+        <div class="icon">⚡</div>
+
+        <h2>Test 1</h2>
+
+        <p>Synchronous Signals</p>
+    </a>
+
+    <a href="/test2/" class="card card-2">
+        <div class="icon">🧵</div>
+
+        <h2>Test 2</h2>
+
+        <p>Same Thread</p>
+    </a>
+
+    <a href="/test3/" class="card card-3">
+        <div class="icon">🗄️</div>
+
+        <h2>Test 3</h2>
+
+        <p>Same Transaction</p>
+    </a>
+
+</div>
+
+{% endblock %}

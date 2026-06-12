@@ -1,0 +1,61 @@
+{% extends "books/base.html" %}
+
+{% block content %}
+
+<div class="content-card">
+
+<h1 class="thread-title">
+    🗄️ Test 3 - Same Database Transaction
+</h1>
+
+<h3>Question</h3>
+<p>Do Django signals run in the same database transaction as the caller?</p>
+
+<h3>Answer</h3>
+<p>Yes.</p>
+
+<h3>Proof Code</h3>
+
+<pre>
+with transaction.atomic():
+
+    caller_transaction = connection.in_atomic_block
+
+    Book.objects.create(title="Transaction Test")
+
+@receiver(post_save, sender=Book)
+def book_saved(sender, instance, **kwargs):
+
+    signal_transaction = connection.in_atomic_block
+</pre>
+
+<h3>Observed Result</h3>
+
+<div class="result-box">
+
+    <p>✅ Caller Transaction: {{ caller_transaction }}</p>
+
+    <p>✅ Signal Transaction: {{ signal_transaction }}</p>
+
+    <p>✅ Same Transaction: {{ result }}</p>
+
+</div>
+
+<h3>Conclusion</h3>
+
+<p>
+The caller transaction state and signal transaction state
+are identical. This confirms that Django signals execute
+within the same database transaction as the caller by default.
+</p>
+
+<a href="/" class="back-btn">
+    ← Back to Home
+</a>
+
+</div>
+
+
+{% endblock %}
+
+
