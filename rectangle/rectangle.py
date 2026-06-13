@@ -11,5 +11,6 @@ class Rectangle:
             "width":self.width
         }
 rect=Rectangle(10,5)
+
 for item in rect:
     print(item)
